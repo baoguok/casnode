@@ -17,7 +17,7 @@ package object
 import (
 	"strconv"
 
-	"github.com/astaxie/beego"
+	"github.com/casbin/casnode/conf"
 	"github.com/casdoor/casdoor-go-sdk/casdoorsdk"
 )
 
@@ -35,15 +35,14 @@ func GetUserFieldInt(user *casdoorsdk.User, field string) int {
 }
 
 func SetUserField(user *casdoorsdk.User, field string, value string) {
+	if user.Properties == nil {
+		user.Properties = map[string]string{}
+	}
 	user.Properties[field] = value
 }
 
-func SetUserFieldInt(user *casdoorsdk.User, field string, value int) {
-	user.Properties[field] = strconv.Itoa(value)
-}
-
 func getInitScore() int {
-	score, err := strconv.Atoi(beego.AppConfig.String("initScore"))
+	score, err := strconv.Atoi(conf.GetConfigString("initScore"))
 	if err != nil {
 		panic(err)
 	}
